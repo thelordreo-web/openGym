@@ -17,6 +17,7 @@
 import { LANGS } from './i18n-core.js'
 
 const KEYS = Object.keys(LANGS)
+const BUILD_DEFAULT_LANG = matchLocale(import.meta.env?.VITE_DEFAULT_LANG)
 
 /** A language tag ('pt-BR', 'pt_br', 'de-AT', 'en-US') as one of LANGS' keys, or null. */
 export function matchLocale(tag) {
@@ -35,7 +36,8 @@ export function matchLocale(tag) {
 /** The language a copy that never chose one should be in, or null for a copy that chose. */
 export function autoLang(S, config, navLangs = []) {
   if (!S || S.langAuto !== true) return null
-  return matchLocale(config?.default_lang)
+  return BUILD_DEFAULT_LANG
+    || matchLocale(config?.default_lang)
     || (navLangs || []).map(matchLocale).find(Boolean)
     || 'en'
 }
